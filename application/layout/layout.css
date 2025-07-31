@@ -1,8 +1,5 @@
 div.imageView{
-
-
   width:      auto;
-
   background : none;
   z-index:    10;
   top:        0;
@@ -11,6 +8,7 @@ div.imageView{
   bottom : 8.5%;
   outline: none;
   right : 28px;
+  pointer-events: none;
 }
 
 #base
@@ -42,14 +40,25 @@ div.imageView{
   height:     87%;
   max-width : 77%;
   max-width : auto;
-
   bottom : 8.5%;
   position:   fixed;
 	background : black;
 	outline: none;
 	 z-index:    10;
 	 right : 10px;
+	 pointer-events: none;
 
+}
+ 
+/* Wrap interactive buttons in a child container */
+.overlayButtons {
+  pointer-events: auto; /* Make buttons clickable */
+  position: fixed;
+  z-index: 9999; /* Above imageView and imagePost */
+  bottom: 10px;
+  left: 10px;
+  display: flex;
+  gap: 10px;
 }
 
 #w

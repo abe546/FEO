@@ -109,11 +109,11 @@ function setupDisplayElements() {
     imageView.id = IMAGE_VIEW_ID;
     document.body.appendChild(imageView);
 
- 
+
     // Create button bar container
-const buttonBar = document.createElement("div");
-buttonBar.id = BUTTON_BAR_ID;
-buttonBar.style.cssText = `
+    const buttonBar = document.createElement("div");
+    buttonBar.id = BUTTON_BAR_ID;
+    buttonBar.style.cssText = `
     position: fixed;
     bottom: 10px;
     left: 10px;
@@ -123,54 +123,54 @@ buttonBar.style.cssText = `
     z-index: 9999;
 `;
 
-// ESC button setup — solo top element
-const escButton = document.createElement("img");
-escButton.src = chrome.runtime.getURL("assets/esc.png");
-escButton.className = "controlButton";
-escButton.style.cssText = `
+    // ESC button setup — solo top element
+    const escButton = document.createElement("img");
+    escButton.src = chrome.runtime.getURL("assets/esc.png");
+    escButton.className = "controlButton";
+    escButton.style.cssText = `
     margin: 2px 0 4px 0;
     align-self: flex-start;
 `;
-escButton.title = "Toggle Image Viewer";
-escButton.addEventListener("click", () => {
-    console.log("ESC button clicked – delegating to triggerKey()");
-    triggerKey(ESCAPE_KEY);
-});
+    escButton.title = "Toggle Image Viewer";
+    escButton.addEventListener("click", () => {
+        console.log("ESC button clicked – delegating to triggerKey()");
+        triggerKey(ESCAPE_KEY);
+    });
 
-// Directional control row
-const topRow = document.createElement("div");
-topRow.id = "directionalControls";
-topRow.style.cssText = `
+    // Directional control row
+    const topRow = document.createElement("div");
+    topRow.id = "directionalControls";
+    topRow.style.cssText = `
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     gap: 2px;
 `;
 
-const controlButtons = [
-    { keyCode: W_KEY, image: "assets/w.png" },
-    { keyCode: S_KEY, image: "assets/s.png" },
-    { keyCode: D_KEY, image: "assets/d.png" },
-    { keyCode: R_KEY, image: "assets/r.png" }
-];
+    const controlButtons = [
+        { keyCode: W_KEY, image: "assets/w.png" },
+        { keyCode: S_KEY, image: "assets/s.png" },
+        { keyCode: D_KEY, image: "assets/d.png" },
+        { keyCode: R_KEY, image: "assets/r.png" }
+    ];
 
-controlButtons.forEach(({ keyCode, image }) => {
-    const img = document.createElement("img");
-    img.src = chrome.runtime.getURL(image);
-    img.className = "controlButton";
-    img.style.margin = "2px";
-    img.addEventListener("click", () => triggerKey(keyCode));
-    topRow.appendChild(img);
-});
+    controlButtons.forEach(({ keyCode, image }) => {
+        const img = document.createElement("img");
+        img.src = chrome.runtime.getURL(image);
+        img.className = "controlButton";
+        img.style.margin = "2px";
+        img.addEventListener("click", () => triggerKey(keyCode));
+        topRow.appendChild(img);
+    });
 
-// Assemble bar
-buttonBar.appendChild(escButton);     // Top
-buttonBar.appendChild(topRow);        // Bottom
-document.body.appendChild(buttonBar);
+    // Assemble bar
+    buttonBar.appendChild(escButton);     // Top
+    buttonBar.appendChild(topRow);        // Bottom
+    document.body.appendChild(buttonBar);
 
-// Prevent blocking clicks behind overlays
-imageView.style.pointerEvents = "none";
-buttonBar.style.pointerEvents = "none";
+    // Prevent blocking clicks behind overlays
+    imageView.style.pointerEvents = "none";
+    buttonBar.style.pointerEvents = "none";
 
 
 }
@@ -205,14 +205,19 @@ function showImage(index) {
                 controls: true,
                 muted: true,
                 autoplay: true,
-                playsInline: true
+                playsInline: true,
+                style: "pointer-events: auto;"
             })
-            : Object.assign(document.createElement("img"), { src: fullSrc });
+            : Object.assign(document.createElement("img"), {
+                src: fullSrc,
+                style: "pointer-events: auto;"
+            });
 
         mediaEl.className = IMAGE_POST_CLASS;
         mediaEl.id = `${IMAGE_POST_ID_PREFIX}${index}`;
         cacheMediaElement(fullSrc, mediaEl);
     }
+
 
     imageView.appendChild(mediaEl);
     imageView.style.display = "block";
@@ -258,6 +263,7 @@ document.addEventListener("keydown", async (e) => {
                 type: "downloadImage",
                 url: imgEl.src
             });
+            break;
         case R_KEY:
             if (!displayEnabled) return;
             location.reload();
