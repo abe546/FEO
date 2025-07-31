@@ -1,0 +1,148 @@
+div.imageView{
+
+
+  width:      auto;
+
+  background : none;
+  z-index:    10;
+  top:        0;
+  left:       0;
+  position:   fixed; /*Fixed will keep the image "stablilized"*/
+  bottom : 8.5%;
+  outline: none;
+  right : 28px;
+}
+
+#base
+{
+	position: fixed;
+	z-index: 20;
+
+	background : none;
+	outline: black;
+
+
+}
+
+#h
+{
+	position: fixed;
+	z-index: 20;
+	 outline : none;
+	 border : none;
+	background : none;
+	outline: black;
+    left : 92%;
+	top : 15%;
+
+}
+
+.imagePost
+{ width:      auto;
+  height:     87%;
+  max-width : 77%;
+  max-width : auto;
+
+  bottom : 8.5%;
+  position:   fixed;
+	background : black;
+	outline: none;
+	 z-index:    10;
+	 right : 10px;
+
+}
+
+#w
+{
+	position: fixed;
+	z-index : 15;
+
+	 top : 11%;
+	height : 80px;
+	width : 80px;
+	left : 85%;
+	background : none;
+
+}
+
+#s
+{
+	position: fixed;
+	z-index : 15;
+
+	 top : 23%;
+	height : 80px;
+	width : 80px;
+	left : 85%;
+	background : none;
+
+}
+
+
+#d
+{
+	position: fixed;
+	z-index : 15;
+
+	 top : 23%;
+	height : 80px;
+	width : 80px;
+	left : 91%;
+	background : none;
+
+}
+
+#e
+{
+	position: fixed;
+	z-index : 15;
+
+	 top : 23%;
+	height : 80px;
+	width : 80px;
+	left : 79%;
+	background : none;
+
+}
+
+#white
+{
+	position : fixed;
+	z-index : 19;
+	height : 22px;
+	width : 44px;
+
+}
+
+#white2
+{
+	position : fixed;
+	z-index : 19;
+	height : 22px;
+	width : 44px;
+	left : 92%;
+	top : 15%;
+
+}
+
+#buttonBar {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    display: flex;
+    gap: 10px;
+    z-index: 9999;
+}
+
+.controlButton {
+    width: 25%;
+    height: auto;
+    max-width: 64px;
+    margin: 2px;
+    cursor: pointer;
+    object-fit: contain;
+}
+
+.controlButton:hover {
+    opacity: 1;
+}
