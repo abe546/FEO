@@ -18,6 +18,9 @@ const D_KEY = 68;
 const scopedMediaCache = new Map();
 const urlHistoryQueue = [];
 const MAX_HISTORY_SIZE = 10;
+// Retrieve last volume from localStorage, default to 1.0
+let lastVideoVolume = parseFloat(localStorage.getItem("lastVideoVolume") || "1.0");
+
 
 let imageElements = [];
 let currentIndex = 0;
@@ -176,12 +179,7 @@ function setupDisplayElements() {
 }
 
 function showImage(index) {
-    if (!displayEnabled) {
-        console.log("showImage() skipped — display is disabled");
-        return;
-    }
-
-    if (index < 0 || index >= imageElements.length) return;
+    if (!displayEnabled || index < 0 || index >= imageElements.length) return;
     currentIndex = index;
 
     const anchor = imageElements[index];
@@ -195,17 +193,21 @@ function showImage(index) {
     const buttonBar = document.getElementById(BUTTON_BAR_ID);
 
     imageView.innerHTML = "";
+    buttonBar.style.display = "flex";
 
     let mediaEl = cached;
     if (!mediaEl) {
         const ext = fullSrc.split(".").pop().toLowerCase();
-        mediaEl = ext === "mp4" || ext === "webm"
+        const isVideo = ext === "mp4" || ext === "webm";
+
+        mediaEl = isVideo
             ? Object.assign(document.createElement("video"), {
                 src: fullSrc,
                 controls: true,
-                muted: true,
+                muted: false,
                 autoplay: true,
                 playsInline: true,
+                volume: lastVideoVolume, // ✅ apply persisted volume
                 style: "pointer-events: auto;"
             })
             : Object.assign(document.createElement("img"), {
@@ -213,16 +215,25 @@ function showImage(index) {
                 style: "pointer-events: auto;"
             });
 
+        cacheMediaElement(fullSrc, mediaEl);
         mediaEl.className = IMAGE_POST_CLASS;
         mediaEl.id = `${IMAGE_POST_ID_PREFIX}${index}`;
-        cacheMediaElement(fullSrc, mediaEl);
     }
 
+    // ✅ Always apply and listen, even if cached
+    if (mediaEl.tagName === "VIDEO") {
+        mediaEl.volume = lastVideoVolume;
+
+        mediaEl.addEventListener("volumechange", () => {
+            lastVideoVolume = mediaEl.volume;
+            localStorage.setItem("lastVideoVolume", lastVideoVolume.toString());
+        });
+    }
 
     imageView.appendChild(mediaEl);
     imageView.style.display = "block";
-    buttonBar.style.display = "flex"; // ← move this outside the function if necessary
 }
+
 
 
 function toggleActive() {
