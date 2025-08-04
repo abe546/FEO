@@ -21,9 +21,7 @@
     "service_worker": "js/background.js"
   },
   "permissions": [
-    "downloads",
-    "scripting",
-    "tabs"
+    "downloads"
   ],
   "web_accessible_resources": [
   {

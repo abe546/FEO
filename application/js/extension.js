@@ -101,6 +101,13 @@ window.addEventListener("load", async () => {
 });
 
 function setupDisplayElements() {
+
+    const activeState = localStorage.getItem(ACTIVE_STATE_KEY);
+
+    if (activeState !== "true") {
+        console.log("Display not active, skipping setup");
+        return;}
+
     // Create base container
     const baseDiv = document.createElement("div");
     baseDiv.id = BASE_DIV_ID;
@@ -173,7 +180,7 @@ function setupDisplayElements() {
 
     // Prevent blocking clicks behind overlays
     imageView.style.pointerEvents = "none";
-    buttonBar.style.pointerEvents = "none";
+    buttonBar.style.pointerEvents = "auto";
 
 
 }
@@ -207,6 +214,7 @@ function showImage(index) {
                 muted: false,
                 autoplay: true,
                 playsInline: true,
+                loop: true,
                 volume: lastVideoVolume, // ✅ apply persisted volume
                 style: "pointer-events: auto;"
             })
@@ -220,15 +228,19 @@ function showImage(index) {
         mediaEl.id = `${IMAGE_POST_ID_PREFIX}${index}`;
     }
 
-    // ✅ Always apply and listen, even if cached
     if (mediaEl.tagName === "VIDEO") {
-        mediaEl.volume = lastVideoVolume;
+    mediaEl.volume = lastVideoVolume;
 
-        mediaEl.addEventListener("volumechange", () => {
-            lastVideoVolume = mediaEl.volume;
-            localStorage.setItem("lastVideoVolume", lastVideoVolume.toString());
-        });
-    }
+    mediaEl.addEventListener("volumechange", () => {
+        lastVideoVolume = mediaEl.volume;
+        localStorage.setItem("lastVideoVolume", lastVideoVolume.toString());
+    });
+
+    setTimeout(() => {
+        mediaEl.play().catch(err => console.warn("Autoplay failed:", err));
+    }, 0);
+}
+
 
     imageView.appendChild(mediaEl);
     imageView.style.display = "block";
@@ -255,15 +267,19 @@ document.addEventListener("keydown", async (e) => {
             updateDisplayState();
             break;
         case W_KEY:
-            if (!displayEnabled) return;
+            if (!displayEnabled)
+                return;
+            if (currentIndex+1 > imageElements.length - 1)
+                return;
             currentIndex++;
-            if (currentIndex >= imageElements.length) return;
             showImage(currentIndex);
             break;
         case S_KEY:
-            if (!displayEnabled) return;
+            if (!displayEnabled)
+                return;
+            if (currentIndex-1 < 0)
+                return;
             currentIndex--;
-            if (currentIndex < 0) return;
             showImage(currentIndex);
             break;
         case D_KEY:
