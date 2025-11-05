@@ -1,14 +1,15 @@
-div.imageView{
-  width:      auto;
-  background : none;
-  z-index:    10;
-  top:        0;
-  left:       0;
-  position:   fixed; /*Fixed will keep the image "stablilized"*/
-  bottom : 8.5%;
+div.imageView {
+  width: auto;
+  background: none;
+  z-index: 10;
+  top: 0;
+  left: 10px;
+  position: fixed;
+  bottom: 8.5%;
   outline: none;
-  right : 28px;
-  pointer-events: none;
+  pointer-events: auto;  /* Change to auto to allow interaction with children */
+  max-width: 40%;
+  height: auto;
 }
 
 #base
@@ -30,24 +31,43 @@ div.imageView{
 	 border : none;
 	background : none;
 	outline: black;
-    left : 92%;
+    right : 8%;     /* Changed from left: 92% to right: 8% */
 	top : 15%;
 
 }
 
-.imagePost
-{ width:      auto;
-  height:     87%;
-  max-width : 77%;
-  max-width : auto;
-  bottom : 8.5%;
-  position:   fixed;
-	background : black;
-	outline: none;
-	 z-index:    10;
-	 right : 10px;
-	 pointer-events: none;
+.imagePost {
+  width: auto;
+  height: 100%;      /* Change from 87% to 100% */
+  max-width: 77%;
+  bottom: 0;         /* Change from 8.5% to 0 */
+  position: fixed;
+  background: black;
+  outline: none;
+  pointer-events: auto;
+  z-index: 10;
+  left: 10px;
+  display: flex;     /* Add flex display */
+  flex-direction: column; /* Stack children vertically */
+}
 
+video {
+  position: relative;
+  pointer-events: auto !important;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 40px; /* Add space for controls */
+}
+
+/* Add specific styling for video controls */
+video::-webkit-media-controls {
+  z-index: 101;
+  pointer-events: auto !important;
+}
+
+video::-webkit-media-controls-timeline {
+  pointer-events: auto !important;
 }
  
 /* Wrap interactive buttons in a child container */
@@ -56,9 +76,19 @@ div.imageView{
   position: fixed;
   z-index: 9999; /* Above imageView and imagePost */
   bottom: 10px;
-  left: 10px;
+  right: 10px;     /* Confirmed right positioning */
   display: flex;
   gap: 10px;
+}
+
+/* Update button bar position */
+#buttonBar {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;    /* Changed from left to right */
+  display: flex;
+  gap: 10px;
+  z-index: 9999;
 }
 
 #w
@@ -69,7 +99,7 @@ div.imageView{
 	 top : 11%;
 	height : 80px;
 	width : 80px;
-	left : 85%;
+	right : 15%;    /* Changed from 85% to 15% for right side */
 	background : none;
 
 }
@@ -82,7 +112,7 @@ div.imageView{
 	 top : 23%;
 	height : 80px;
 	width : 80px;
-	left : 85%;
+	right : 15%;    /* Changed from 85% to 15% for right side */
 	background : none;
 
 }
@@ -96,7 +126,7 @@ div.imageView{
 	 top : 23%;
 	height : 80px;
 	width : 80px;
-	left : 91%;
+	right : 9%;     /* Changed from 91% to 9% for right side */
 	background : none;
 
 }
@@ -109,7 +139,7 @@ div.imageView{
 	 top : 23%;
 	height : 80px;
 	width : 80px;
-	left : 79%;
+	right : 21%;    /* Changed from 79% to 21% for right side */
 	background : none;
 
 }
@@ -129,7 +159,7 @@ div.imageView{
 	z-index : 19;
 	height : 22px;
 	width : 44px;
-	left : 92%;
+	right : 8%;     /* Changed from left: 92% to right: 8% */
 	top : 15%;
 
 }
@@ -137,7 +167,7 @@ div.imageView{
 #buttonBar {
     position: fixed;
     bottom: 10px;
-    left: 10px;
+    right: 10px;    /* Changed from left to right */
     display: flex;
     gap: 10px;
     z-index: 9999;
@@ -154,4 +184,9 @@ div.imageView{
 
 .controlButton:hover {
     opacity: 1;
+}
+
+.video-js .vjs-control-bar {
+  z-index: 101;  /* Make sure control bar is above video */
+  pointer-events: auto !important;
 }

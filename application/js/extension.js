@@ -101,12 +101,12 @@ window.addEventListener("load", async () => {
 });
 
 function setupDisplayElements() {
-
     const activeState = localStorage.getItem(ACTIVE_STATE_KEY);
 
     if (activeState !== "true") {
         console.log("Display not active, skipping setup");
-        return;}
+        return;
+    }
 
     // Create base container
     const baseDiv = document.createElement("div");
@@ -117,30 +117,30 @@ function setupDisplayElements() {
     const imageView = document.createElement("div");
     imageView.className = IMAGE_VIEW_ID;
     imageView.id = IMAGE_VIEW_ID;
+
     document.body.appendChild(imageView);
 
-
-    // Create button bar container
+    // Create button bar container — now positioned on the right
     const buttonBar = document.createElement("div");
     buttonBar.id = BUTTON_BAR_ID;
     buttonBar.style.cssText = `
-    position: fixed;
-    bottom: 10px;
-    left: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    z-index: 9999;
-`;
+        position: fixed;
+        bottom: 10px;
+        right: 10px; /* changed from left: 10px */
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end; /* align buttons to right */
+        z-index: 9999;
+    `;
 
     // ESC button setup — solo top element
     const escButton = document.createElement("img");
     escButton.src = chrome.runtime.getURL("assets/esc.png");
     escButton.className = "controlButton";
     escButton.style.cssText = `
-    margin: 2px 0 4px 0;
-    align-self: flex-start;
-`;
+        margin: 2px 0 4px 0;
+        align-self: flex-end; /* align to right */
+    `;
     escButton.title = "Toggle Image Viewer";
     escButton.addEventListener("click", () => {
         console.log("ESC button clicked – delegating to triggerKey()");
@@ -151,11 +151,11 @@ function setupDisplayElements() {
     const topRow = document.createElement("div");
     topRow.id = "directionalControls";
     topRow.style.cssText = `
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: 2px;
-`;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end; /* align buttons to right */
+        gap: 2px;
+    `;
 
     const controlButtons = [
         { keyCode: W_KEY, image: "assets/w.png" },
@@ -174,16 +174,15 @@ function setupDisplayElements() {
     });
 
     // Assemble bar
-    buttonBar.appendChild(escButton);     // Top
-    buttonBar.appendChild(topRow);        // Bottom
+    buttonBar.appendChild(escButton);
+    buttonBar.appendChild(topRow);
     document.body.appendChild(buttonBar);
 
     // Prevent blocking clicks behind overlays
     imageView.style.pointerEvents = "none";
     buttonBar.style.pointerEvents = "auto";
-
-
 }
+
 
 function showImage(index) {
     if (!displayEnabled || index < 0 || index >= imageElements.length) return;
@@ -322,3 +321,23 @@ window.addEventListener("load", async () => {
         showImage(currentIndex);
     }
 });
+
+let cursorTimeout;
+
+function setupCursorBehavior() {
+    document.addEventListener('mousemove', function() {
+        // Show cursor
+        document.body.style.cursor = 'default';
+        
+        // Clear existing timeout
+        clearTimeout(cursorTimeout);
+        
+        // Set new timeout to hide cursor after 1 second
+        cursorTimeout = setTimeout(function() {
+            document.body.style.cursor = 'none';
+        }, 1000);
+    });
+}
+
+// Add this to your initialization code
+setupCursorBehavior();
